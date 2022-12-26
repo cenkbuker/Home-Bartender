@@ -13,6 +13,7 @@ class User(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+        autoincrement=True
     )
 
     first_name = db.Column(
@@ -36,6 +37,32 @@ class User(db.Model):
         nullable = False,
     )
 
+    @classmethod
+    def register(cls, username, password, first_name, last_name):
+        """Register handling, password crypted"""
+
+        hashed = bcrypt.generate_password_hash(password)
+        hashed_utf8 = hashed.decode("utf8")
+        user = cls(
+            username=username,
+            password=hashed_utf8,
+            first_name=first_name,
+            last_name=last_name,
+        )
+        db.session.add(user)
+        return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Checks user is valid or not"""
+
+        user = User.query.filter_by(username = username).first()
+
+        if user and bcrypt.check_password_hash(user.password, password):
+            return user
+        else:
+            return False
+
 class Cocktails(db.Model):
     """Coctail details"""
 
@@ -56,12 +83,12 @@ class Cocktails(db.Model):
         nullable=False,
     )
 
-    description = db.Column(
+    instructions = db.Column(
         db.Text,
         nullable=False,
     )
 
-    ingredients = db.relationship('ingredient', secondary= 'cocktail_ingredient', backref= 'cocktail')
+    ingredients = db.relationship('Ingredient', secondary= 'cocktail_ingredient', backref= 'cocktail')
 
 class Fav(db.Model):
     """users fav cocktails"""
@@ -71,6 +98,7 @@ class Fav(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+        autoincrement=True
     )
 
     user_id = db.Column(
@@ -80,7 +108,7 @@ class Fav(db.Model):
 
     cocktail_id = db.Column(
         db.Integer,
-        db.foreignKey('cocktail.id', ondelete= "cascade"),
+        db.ForeignKey('cocktail.id', ondelete= "cascade"),
     )
 
 class Ingredient(db.Model):
@@ -90,9 +118,10 @@ class Ingredient(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+        autoincrement=True
     )
 
-    name = db.Column(
+    ing_name = db.Column(
         db.Text,
         nullable=False,
     )
@@ -106,21 +135,21 @@ class Cocktail_Ingredient(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
+        autoincrement=True
     )
 
     cocktail_id = db.Column(
         db.Integer,
-        db.Foreignkey('cocktail.id')
+        db.ForeignKey('cocktail.id')
     )
 
     ingredient_id = db.Column(
         db.Integer,
-        db.Foreignkey('ingredient.id')
+        db.ForeignKey('ingredient.id')
     )
 
-    measurement = db.column(
-        db.Text,
-        nullable=False
+    measurement = db.Column(
+        db.Text
     )
 
 def connect_db(app):

@@ -1,0 +1,26 @@
+{%extends 'base.html'%}
+{%block content%}
+<h2>Wanna search a cocktail</h2>
+
+<form method="post">
+    {{form.hidden_tag()}}
+        {%for field in form
+        if field.widget.input_type != 'hidden'%}
+        {%endfor%}
+    <div>
+        {{form.name.label}}
+        {{form.name()}}
+    </div>
+    <div>
+        {{form.choice.label}}
+        {%for selection in form.choice%}
+        {{selection}}
+        {{selection.label}}
+
+        {%endfor%}
+    </div>
+    <br>
+    <button class="btn btn-blue">Submit</button>
+</form>
+
+{%endblock%}

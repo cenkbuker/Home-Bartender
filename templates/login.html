@@ -1,0 +1,47 @@
+{%extends 'base.html'%}
+
+
+
+{%block content%}
+
+<div>
+<h1>Login</h1>
+
+
+<form method="post">
+    {{form.hidden_tag()}}
+    {%for field in form
+    if field.widget.input_type != 'hidden'%}
+    {%endfor%}
+
+    <div>
+        {{form.username.label}}
+    
+        {{form.username()}}
+    </div>
+    <div>
+        {{form.password.label}}
+        {{form.password()}}
+        <br>
+        {%for field in form%}
+        {%for error in field.errors%}
+            {{error}}
+        {%endfor%}
+        {%endfor%}
+
+          
+    </div>
+
+    <button class="btn btn-blue mt-2 mb-4">Submit</button>
+
+
+</form>
+
+<h3>Dont have an account??</h3>
+<p>Register for free below</p>
+<form action="/register">
+    <button class="btn btn-blue">Register</button>
+</form>
+
+</div>
+{%endblock%}
