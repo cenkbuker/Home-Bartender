@@ -48,13 +48,45 @@ def coctail_details(id):
 @app.route("/cocktails/<string:name>")
 def search_cocktails(name):
     data = requests.get(f"{BASE_API_URL}search.php?s={name}").json()
-    print(data)
-    for result in data:
-        search_cocktail(result)
-        searched_cocktails = Cocktails.query.filter(
-            Cocktails.name.like("%" + name + "%")
-        )
-    return render_template("search-list.html", name=name, cocktails=searched_cocktails)
+    raw_data = data["drinks"]
+    
+
+    return render_template("search-list.html", name=name, cocktails=search_cocktail(raw_data))
+
+# FAV HANDLING
+
+@app.route('/cocktail/<int:fav_cocktail>/fav')
+def add_to_fav(fav_cocktail):
+    if CURR_USER_KEY not in session:
+        return redirect('/login')
+    if not Fav.query.filter(Fav.user_id== session[CURR_USER_KEY], Fav.cocktail_id== fav_cocktail).first():
+        fav_handle= Fav(user_id= session[CURR_USER_KEY], cocktail_id= fav_cocktail)
+        db.session.add(fav_handle)
+        db.session.commit()
+    return redirect(f'/{session[CURR_USER_KEY]}/favorites')
+
+
+
+@app.route('/<int:user_id>/favorites')
+def user_fav(user_id):
+    if CURR_USER_KEY not in session:
+        return redirect('/login')
+    
+    favs= Fav.query.filter_by(user_id=user_id).all()
+    fav_list = []
+    i = 0
+    for result in favs:
+        fav_details = Cocktails.query.filter_by(id=favs[i].cocktail_id)
+        fav_list.append(fav_details) 
+        i +=1
+    return render_template('user-favs.html', cocktail_list=fav_list)
+
+@app.route('/<int:user_id>/favorites/delete/<int:drink_id>', methods=["POST"])
+def delete_cocktail(drink_id,user_id):
+    fav = Fav.query.filter_by(cocktail_id=drink_id).first()
+    db.session.delete(fav)
+    db.session.commit()
+    return redirect(f'/{user_id}/favorites')
 
 
 # USER LOGIN AND REGISTER

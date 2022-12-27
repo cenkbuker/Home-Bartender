@@ -17,7 +17,7 @@
        <li >Home Bartender</li>
        <li ><a href="/">Home</a></li>
        {%if session['curr_user']%}
-       <li><a href="/{{session['curr_user']}}/likes">Favorites</a></li>
+       <li><a href="/{{session['curr_user']}}/favorites">Favorites</a></li>
        <li><a href="/logout">Logout</a></li>
        {%else%}
        <li><a href="/login">Login</a></li>

@@ -58,51 +58,17 @@ def add_cocktail(processed_cocktail):
         db.session.commit()
 
 
-def search_cocktail(data):
-    for idx in len(data["drinks"]):
-        if not bool(
-            Cocktails.query.filter(
-                Cocktails.id == data["drinks"][idx]["idDrink"]
-            ).first()
-        ):
-            new_cocktail = Cocktails(
-                id=data["drinks"][idx]["idDrink"],
-                name=data["drinks"][idx]["strDrink"],
-                img_url=data["drinks"][idx]["strDrinkThumb"],
-                instructions=data["drinks"][idx]["strInstructions"],
-            )
-            db.session.add(new_cocktail)
-            db.session.commit()
+def search_cocktail(search):
+    search_result = []
+    i = 0
+    for cocktail in search:
+        
+        search_result_dict = {
+        "id": search[i]["idDrink"],
+        "name": search[i]["strDrink"],
+        "image": search[i]["strDrinkThumb"],
+        }
+        i+=1
+        search_result.append(search_result_dict)
+    return search_result
 
-        for i in range(1, 15):
-            if data["drinks"][idx][f"strIngredient{i}"] is not None:
-                if not bool(
-                    Ingredient.query.filter(
-                        Ingredient.ing_name == data["drinks"][idx][f"strIngredient{i}"]
-                    ).first()
-                ):
-                    new_ingredient = Ingredient(
-                        ing_name=data["drinks"][idx][f"strIngredient{i}"]
-                    )
-                    db.session.add(new_ingredient)
-                    db.session.commit()
-                if not bool(
-                    Cocktail_Ingredient.query.filter(
-                        Cocktail_Ingredient.id == data["drinks"][idx]["idDrink"]
-                    ).first()
-                ):
-                    ingredient = (
-                        Ingredient.query.filter(
-                            Ingredient.ing_name
-                            == data["drinks"][idx][f"strIngredient{i}"]
-                        )
-                        .first()
-                        .id
-                    )
-                    new_measurement = Cocktail_Ingredient(
-                        cocktail_id=data["drinks"][idx]["idDrink"],
-                        ingredient_id=ingredient,
-                        measurement=data["drinks"][idx][f"strMeasure{i}"],
-                    )
-                    db.session.add(new_measurement)
-                    db.session.commit()

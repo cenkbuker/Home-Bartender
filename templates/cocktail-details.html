@@ -40,37 +40,16 @@
 
     </table>
 
-
-
-
     <div class="btn-group mt-1 mb-2">
     <form action="/">      
     <button  class="btn btn-blue mt-3 me-2">Go Back</button>
     </form> 
     {%if session['curr_user']%}
-    <form action="/cocktail/{{cocktail.id}}/like">
+    <form action="/cocktail/{{cocktail.id}}/fav">
     <button class="btn btn-danger mt-3 ">Favorite</button>       
     </form> 
     {%endif%}
     </div>
 
 
-<h3 class="my-2">User Reviews</h3>
-{%if session['curr_user']%}
-
-
-<form method="post" class="center">
-    {{form.hidden_tag()}}
-        {%for field in form
-        if field.widget.input_type != 'hidden'%}
-        {%endfor%}
-    <div class="form-group">
-        {{form.text.label}}
-        <br>
-        {{form.text()}}
-    </div>
-
-</form>
-
-{%endif%}
 {%endblock%}
