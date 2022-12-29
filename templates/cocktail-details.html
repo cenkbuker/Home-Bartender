@@ -51,5 +51,52 @@
     {%endif%}
     </div>
 
+    <h3>User Reviews</h3>
+    {%if session['curr_user']%}
+    
+    
+    <form method="post">
+        {{form.hidden_tag()}}
+            {%for field in form
+            if field.widget.input_type != 'hidden'%}
+            {%endfor%}
+        <div class="form-group">
+            {{form.comment.label}}
+            <br>
+            {{form.comment()}}
+        </div>
+    
+    
+        <button class="form-group btn btn-danger my-3">Add Comment</button>
+    
+    </form>
+    
+    {%endif%}
+    
+    
+    {%if comments%}
+    {%for comment in comments%}
+    
+    <div class="card my-3 comment" style="width: 80%;">
+        <div class="card-body">
+            <p class="card-text white">{{comment.comment}}</p>
+            {%if comment.user_id == session['curr_user']%}
+        
+            <form method="post" action="/delete/comment/{{comment.id}}">
+                <button class="btn btn-danger mb-1"><i class="fa-solid fa-eraser"></i></button>
+            </form>
+        {%endif%}
+        </div>
+        
+    
+    </div>
+    
+    
+    {%endfor%}
+    {%else%}
+    <p>No Reviews Yet</p>
+    {%endif%}
+    </div>
+    </div>
 
 {%endblock%}

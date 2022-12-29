@@ -152,6 +152,32 @@ class Cocktail_Ingredient(db.Model):
         db.Text
     )
 
+class Comment(db.Model):
+    """Comments table"""
+
+    __tablename__ = 'comments'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    cocktail_id = db.Column(
+        db.Integer,
+        db.ForeignKey('cocktail.id')
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete= "cascade"),
+    )
+
+    comment = db.Column(
+        db.Text
+    )
+
+
 def connect_db(app):
     """Connect to database."""
 

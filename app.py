@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, flash, redirect, session, g, abort
 import requests
 from functions import add_cocktail, search_cocktail, process_cocktail
-from model import db, connect_db, User, Cocktails, Cocktail_Ingredient, Fav, Ingredient
-from forms import UserAddForm, LoginForm, SearchCocktailForm, UserNewCocktailForm
-
+from model import db, connect_db, User, Cocktails, Cocktail_Ingredient, Fav, Ingredient, Comment
+from forms import UserAddForm, LoginForm, SearchCocktailForm, UserNewCocktailForm, AddComments
 app = Flask(__name__)
 app.app_context().push()
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///bartender"
@@ -26,8 +25,6 @@ def homepage():
     if form.validate_on_submit():
         name = form.name.data
         choice = form.choice.data
-        print(choice)
-        print(name)
         return redirect(f"/{choice}/{name}")
     return render_template("homepage.html", form=form)
 
@@ -40,16 +37,29 @@ def coctail_details(id):
     add_cocktail(processed_cocktail)
     cocktail = Cocktails.query.filter_by(id=id).first()
     measurement = Cocktail_Ingredient.query.filter_by(cocktail_id=id).all()
+    form = AddComments()
+    if form.validate_on_submit():
+        comment = form.comment.data
+        new_comment = Comment(user_id = session[CURR_USER_KEY], comment= comment, cocktail_id= id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+    comments= Comment.query.filter_by(user_id=session[CURR_USER_KEY]).all()
     return render_template(
-        "cocktail-details.html", cocktail=cocktail, measurement=measurement
+        "cocktail-details.html", cocktail=cocktail, measurement=measurement, form=form, comments=comments
     )
 
+@app.route("/delete/comment/<int:id>", methods=["POST"])
+def delete_comment(id):
+    comment= Comment.query.filter_by(id=id).first()
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(f'/{session[CURR_USER_KEY]}/favorites')
 
 @app.route("/cocktails/<string:name>")
 def search_cocktails(name):
     data = requests.get(f"{BASE_API_URL}search.php?s={name}").json()
     raw_data = data["drinks"]
-    
 
     return render_template("search-list.html", name=name, cocktails=search_cocktail(raw_data))
 
