@@ -70,9 +70,7 @@ def search_cocktails(name):
         return render_template("search-list.html", name=name, cocktails=search_cocktail(raw_data))
     except:
         no_result_dict = {
-        "id": "",
         "name": "No result for search term",
-        "image": "",
         }
         return render_template("search-list.html", name=name, cocktails=no_result_dict)
 
