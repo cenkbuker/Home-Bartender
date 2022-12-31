@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, flash, redirect, session, g, abort
 import requests
 from functions import add_cocktail, search_cocktail, process_cocktail
-from model import db, connect_db, User, Cocktails, Cocktail_Ingredient, Fav, Ingredient, Comment
-from forms import UserAddForm, LoginForm, SearchCocktailForm, UserNewCocktailForm, AddComments
+from model import db, connect_db, User, Cocktails, Cocktail_Ingredient, Fav, Comment
+from forms import UserAddForm, LoginForm, SearchCocktailForm, AddComments
 app = Flask(__name__)
 app.app_context().push()
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///bartender"
@@ -14,7 +14,7 @@ db.create_all()
 app.config["SECRET_KEY"] = "capstonesecret"
 
 
-BASE_API_URL = "https://www.thecocktaildb.com/api/json/v2/1/"
+BASE_API_URL = "https://www.thecocktaildb.com/api/json/v1/1/"
 CURR_USER_KEY = "curr_user"
 
 
@@ -24,9 +24,14 @@ def homepage():
     form = SearchCocktailForm()
     if form.validate_on_submit():
         name = form.name.data
-        choice = form.choice.data
-        return redirect(f"/{choice}/{name}")
-    return render_template("homepage.html", form=form)
+        
+        return redirect(f"/cocktails/{name}")
+
+    random = requests.get(f"{BASE_API_URL}random.php").json()
+    raw_cocktail = random["drinks"][0]
+    random_cocktail=process_cocktail(raw_cocktail)
+    
+    return render_template("homepage.html", form=form, cocktail=random_cocktail)
 
 
 @app.route("/cocktails/<int:id>", methods=["GET", "POST"])
@@ -52,16 +57,26 @@ def coctail_details(id):
 @app.route("/delete/comment/<int:id>", methods=["POST"])
 def delete_comment(id):
     comment= Comment.query.filter_by(id=id).first()
+    cocktail_id = comment.cocktail_id
     db.session.delete(comment)
     db.session.commit()
-    return redirect(f'/{session[CURR_USER_KEY]}/favorites')
+    return redirect(f'/cocktails/{cocktail_id}')
 
 @app.route("/cocktails/<string:name>")
 def search_cocktails(name):
-    data = requests.get(f"{BASE_API_URL}search.php?s={name}").json()
-    raw_data = data["drinks"]
+    try:
+        data = requests.get(f"{BASE_API_URL}search.php?s={name}").json()
+        raw_data = data["drinks"]
+        return render_template("search-list.html", name=name, cocktails=search_cocktail(raw_data))
+    except:
+        no_result_dict = {
+        "id": "",
+        "name": "No result for search term",
+        "image": "",
+        }
+        return render_template("search-list.html", name=name, cocktails=no_result_dict)
 
-    return render_template("search-list.html", name=name, cocktails=search_cocktail(raw_data))
+    
 
 # FAV HANDLING
 

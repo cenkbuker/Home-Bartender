@@ -21,14 +21,7 @@ class SearchCocktailForm(FlaskForm):
     """Cocktail serach form"""
 
     name = StringField('Cocktail name', validators=[DataRequired()])
-    choice = RadioField("Cocktail name or ingredient?", choices=[('cocktails','cocktails'),('ingredients','ingredients')], default='cocktails')
 
-class UserNewCocktailForm(FlaskForm):
-    """Form for adding users"""
-    name = StringField('Cocktail name', validators=[DataRequired()])
-    photo = StringField('Cocktail photo', validators=[DataRequired()])
-    description = StringField('Cocktail description')
-   
 class AddComments(FlaskForm):
     """Form for adding comments"""
     comment= StringField('Your comments', validators=[DataRequired()])

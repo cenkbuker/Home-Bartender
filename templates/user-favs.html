@@ -2,19 +2,21 @@
 {%block content%}
 
 <div>
-<h2>Favorite cocktails</h2>
+<h2 class="center m-3">Favorite cocktails</h2>
 {%if cocktail_list%}
-<div class="row row-cols-3 mt-5 mx-auto">
+<div class="row row-cols-auto justify-content-center">
 {%for cocktails in cocktail_list%}
 {%for cocktail in cocktails%}
 
-<div class="col-sm-2 cocktail-showcase">
-    
-    <img class="img-thumbnail" src="{{cocktail.img_url}}" alt="Img for {{cocktail.name}}" width="95%">
+<div class="row card-search">
+    <div class="col-sm center">
+    <img class="card-img-top" src="{{cocktail.img_url}}" alt="Img for {{cocktail.name}}" style="width: 18rem;">
     <form class="inline" method="post" action="/{{session['curr_user']}}/favorites/delete/{{cocktail.id}}">
-    <h4><a class="blue-text " href="/cocktails/{{cocktail.id}}">{{cocktail.name}}</a></h4>
-    <button class="btn btn-sm btn-blue mt-1 mb-3 ">X</button>
+        
+        <h4 class="card-title mt-3"><a class="link-color" href="/cocktails/{{cocktail.id}}">{{cocktail.name}}</a></h4>
+        <button class="btn btn-outline-dark m-3">Delete Favorite</button>
     </form>
+</div>
 </div> 
 {% endfor %}
 {% endfor %}

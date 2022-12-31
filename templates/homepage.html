@@ -1,26 +1,29 @@
-{%extends 'base.html'%}
-{%block content%}
-<h2>Wanna search a cocktail</h2>
+{%extends 'base.html'%} {%block content%}
+<h2 class="center m-3">Wanna search a cocktail</h2>
 
 <form method="post">
-    {{form.hidden_tag()}}
-        {%for field in form
-        if field.widget.input_type != 'hidden'%}
-        {%endfor%}
-    <div>
-        {{form.name.label}}
-        {{form.name()}}
-    </div>
-    <div>
-        {{form.choice.label}}
-        {%for selection in form.choice%}
-        {{selection}}
-        {{selection.label}}
-
-        {%endfor%}
-    </div>
-    <br>
-    <button class="btn btn-blue">Submit</button>
+  {{form.hidden_tag()}} {%for field in form if field.widget.input_type !=
+  'hidden'%} {%endfor%}
+  <div class="center">
+    {{form.name.label}} {{form.name()}}
+    <button class="btn btn-secondary">Submit</button>
+  </div>
 </form>
+<h3 class="center line mt-5">Wanna try something new?</h3>
+<div class="card center card-homepage" >
+    <img
+      class="homepage-photo"
+      src="{{cocktail.image}}"
+      alt="Img for {{cocktail.name}}
+      "
+    />
+    <div class="card-body">
+      <h4 class="card-title">
+        <a class="btn btn-outline-secondary" href="/cocktails/{{cocktail.id}}"
+          >{{cocktail.name}}</a
+        >
+      </h4>
+    </div>
+</div>
 
 {%endblock%}
