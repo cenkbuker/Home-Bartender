@@ -4,22 +4,22 @@
 
 {%block content%}
 
-<div>
-<h1>Please Register</h1>
+<div class="center">
+<h1 class="m-4">Please Register</h1>
 
 
-<form method="post">
+<form method="post" >
     {{form.hidden_tag()}}
     {%for field in form
     if field.widget.input_type != 'hidden'%}
     {%endfor%}
 
-    <div>
+    <div class="mt-2">
         {{form.username.label}}
     
         {{form.username()}}
     </div>
-    <div class="form-group">
+    <div class="mt-2">
         {{form.password.label}}
         {{form.password()}}
         <br>
@@ -29,16 +29,15 @@
         {%endfor%}
         {%endfor%}
     </div>
-    <div>
+    <div class="mt-2">
         {{form.first_name.label}}
-    
         {{form.first_name()}}
+        <div class="mt-2">
         {{form.last_name.label}}
-    
         {{form.last_name()}}
-
+        </div>
     </div>
-    <button class="btn btn-blue mt-2 mb-4">Submit</button>
+    <button class="btn btn-outline-secondary m-4">Submit</button>
 
 
 </form>

@@ -1,26 +1,31 @@
 {%extends 'base.html'%}
 
 {%block content%}
-<div>
-<h3>Search Results for {{name}}</h3>
-{%if cocktails.name == "No Results Found"%}
-<p>{{cocktails.name}}</p>
-<form action="/">
-<button class="btn btn-blue">Homepage</button>
+<div style="margin-top: 15%;">
+<h2 class="center m-3">Search Results for {{name}}</h2>
+{%if cocktails.name == "No result for search term"%}
+<h3 class="center">{{cocktails.name}}</h3>
+<form action="/" class="center mt-5">
+<button class="btn btn-outline-secondary ">Homepage</button>
 </form>
 {%else%}
-<div>
+
+    <div class="row card-search">
 {%for cocktail in cocktails%}
-<div>
-    
-    <img src="{{cocktail.img_url}}" alt="Img for {{cocktail.name}}">
-    <h4><a href="/cocktail/{{cocktail.id}}">{{cocktail.name}}</a></h4>
-</div>  
+
+    <div class="col-sm ">
+        <div class="card" style="width: 18rem;">
+
+            <img class="card-img-top" src="{{cocktail.image}}" alt="Img for {{cocktail.name}}">
+            <div class="card-body center">
+                <h4 class="card-title"><a class="link-color" href="/cocktails/{{cocktail.id}}">{{cocktail.name}}</a></h4>
+            </div>
+        </div>  
+    </div>
+
 {% endfor %}
-</div>
-<form action="/">
-    <button >Homepage</button>
-    </form>
+    </div>
+
 {%endif%}
 </div>
 </div>
