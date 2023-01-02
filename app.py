@@ -42,17 +42,23 @@ def coctail_details(id):
     add_cocktail(processed_cocktail)
     cocktail = Cocktails.query.filter_by(id=id).first()
     measurement = Cocktail_Ingredient.query.filter_by(cocktail_id=id).all()
-    form = AddComments()
-    if form.validate_on_submit():
-        comment = form.comment.data
-        new_comment = Comment(user_id = session[CURR_USER_KEY], comment= comment, cocktail_id= id)
-        db.session.add(new_comment)
-        db.session.commit()
+    try:
+        form = AddComments()
+        if form.validate_on_submit():
+            comment = form.comment.data
+            new_comment = Comment(user_id = session[CURR_USER_KEY], comment= comment, cocktail_id= id)
+            db.session.add(new_comment)
+            db.session.commit()
 
-    comments= Comment.query.filter_by(user_id=session[CURR_USER_KEY]).all()
-    return render_template(
+            comments= Comment.query.filter_by(cocktail_id=id).all()
+        return render_template(
         "cocktail-details.html", cocktail=cocktail, measurement=measurement, form=form, comments=comments
-    )
+        )
+    except: 
+        comments= Comment.query.filter_by(cocktail_id=id).all()
+        return render_template(
+        "cocktail-details.html", cocktail=cocktail, measurement=measurement, form=form, comments=comments
+        )
 
 @app.route("/delete/comment/<int:id>", methods=["POST"])
 def delete_comment(id):
