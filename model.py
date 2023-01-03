@@ -176,7 +176,7 @@ class Comment(db.Model):
     comment = db.Column(
         db.Text
     )
-
+    user = db.relationship('User')
 
 def connect_db(app):
     """Connect to database."""

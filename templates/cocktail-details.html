@@ -77,12 +77,17 @@
     
     <div class="card my-3 comment_each">
         <div class="card-body">
+            <div>
+                <p class="card-text writer"><small class="text-muted">{{comment.user.first_name}}, {{comment.user.last_name}}</small></p>
+            </div>
             <p class="card-text" style="font-size:18px;">{{comment.comment}}</p>
             {%if comment.user_id == session['curr_user']%}
-        
-            <form method="post" action="/delete/comment/{{comment.id}}">
-                <button class="btn btn-danger mb-1">Delete Comment</button>
-            </form>
+            <div class="delete_comment">
+                <form method="post" action="/delete/comment/{{comment.id}}">
+                    <button class="btn"><i class="fa fa-trash-o"></i></button>
+                    
+                </form>
+            </div>
         {%endif%}
         </div>
     </div>

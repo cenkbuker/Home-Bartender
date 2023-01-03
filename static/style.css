@@ -81,3 +81,15 @@ td {
   max-width: 60% !important;
   height: auto !important;
 }
+
+.delete_comment{
+  position: absolute;
+  top:0;
+  right:0;
+}
+.writer{
+  position: absolute;
+  top:5px;
+  left: 20px;
+  font-size: 18px;
+}

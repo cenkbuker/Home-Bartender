@@ -49,7 +49,6 @@ def coctail_details(id):
             new_comment = Comment(user_id = session[CURR_USER_KEY], comment= comment, cocktail_id= id)
             db.session.add(new_comment)
             db.session.commit()
-
             comments= Comment.query.filter_by(cocktail_id=id).all()
         return render_template(
         "cocktail-details.html", cocktail=cocktail, measurement=measurement, form=form, comments=comments
