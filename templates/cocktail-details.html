@@ -38,7 +38,7 @@
 
                         {%if session['curr_user']%}
                         <form action="/cocktail/{{cocktail.id}}/fav">
-                        <button class="btn btn-outline-secondary mt-3 ">Favorite</button>       
+                        <button class="btn btn-outline-secondary mt-3 btn-mobile ">Favorite</button>       
                         </form> 
                         {%endif%}
                         </div>
@@ -65,7 +65,7 @@
         </div>
     
     
-        <button class="btn btn-outline-secondary my-3">Add Comment</button>
+        <button class="btn btn-outline-secondary my-3 btn-mobile">Add Comment</button>
     
     </form>
     
@@ -84,7 +84,7 @@
             {%if comment.user_id == session['curr_user']%}
             <div class="delete_comment">
                 <form method="post" action="/delete/comment/{{comment.id}}">
-                    <button class="btn"><i class="fa fa-trash-o"></i></button>
+                    <button class="btn btn-mobile"><i class="fa fa-trash-o"></i></button>
                     
                 </form>
             </div>
