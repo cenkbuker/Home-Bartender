@@ -93,3 +93,6 @@ td {
   left: 20px;
   font-size: 18px;
 }
+.btn-mobile{
+  z-index: 99;
+}
