@@ -6,7 +6,8 @@ from forms import UserAddForm, LoginForm, SearchCocktailForm, AddComments
 import os
 app = Flask(__name__)
 app.app_context().push()
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///bartender"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL', 'postgresql:///home-bartender')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 connect_db(app)
