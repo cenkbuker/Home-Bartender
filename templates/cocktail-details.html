@@ -78,7 +78,7 @@
     <div class="card my-3 comment_each">
         <div class="card-body">
             <div>
-                <p class="card-text writer"><small class="text-muted">{{comment.user.first_name}}, {{comment.user.last_name}}</small></p>
+                <p class="card-text writer"><small class="text-muted">{{comment.user.first_name}} {{comment.user.last_name}}</small></p>
             </div>
             <p class="card-text" style="font-size:18px;">{{comment.comment}}</p>
             {%if comment.user_id == session['curr_user']%}

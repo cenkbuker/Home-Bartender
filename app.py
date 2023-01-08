@@ -3,6 +3,7 @@ import requests
 from functions import add_cocktail, search_cocktail, process_cocktail
 from model import db, connect_db, User, Cocktails, Cocktail_Ingredient, Fav, Comment
 from forms import UserAddForm, LoginForm, SearchCocktailForm, AddComments
+import os
 app = Flask(__name__)
 app.app_context().push()
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///bartender"
@@ -11,7 +12,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 connect_db(app)
 db.create_all()
 
-app.config["SECRET_KEY"] = "capstonesecret"
+app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY','capstonesecret')
 
 
 BASE_API_URL = "https://www.thecocktaildb.com/api/json/v1/1/"
